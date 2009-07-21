@@ -1,0 +1,31 @@
+.mf a.show {
+	position:absolute;
+	margin-left:-16px;
+	width:32px;
+	height:32px;
+	top:70%;
+	left:50%;
+	z-index:100;
+	cursor:pointer;
+}
+.mf a.show.image{
+	background:url(../images/open_image.png) no-repeat 50%;
+}
+.mf a.show.viewerload{
+	background:url(../images/loader.gif) no-repeat 50%;
+}
+.mf a.show.link{
+	background:url(../images/open_link.png) no-repeat 50%;
+}
+.mf div.tooltip{
+	background:url(../images/tooltip.png) no-repeat 50%;
+	width:262px;
+	margin-left:-151px;
+	height:70px;
+	padding:20px;
+	position:absolute;
+	z-index:101;
+	top:0;
+	left:50%;
+	text-align:center;
+}

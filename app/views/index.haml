@@ -1,0 +1,30 @@
+%fieldset
+  %form{:method => "post", :multipart => true}
+    %ul
+      %li
+        %label{:for => 'new-interview-name'}
+          Name
+        %input{:type => 'text', :name => 'name', :id => 'new-interview-name'}
+      %li
+        %label{:for => 'new-interview-name'}
+          Title
+        %input{:type =>'text', :name => 'title', :id => 'new-interview-title'}
+      %li
+        %label{:for => 'new-interview-name'}
+          URL
+        %input{:type => 'text', :name => 'url', :id => 'new-interview-url'}
+      %li 
+        %label{:for => 'new-interview-data'}
+          Interview picture
+        %input{:type => 'file', :name => 'data'} 
+      %li
+        %button{:type=>'submit'}
+          Add Interview
+
+%section{:id => 'interviews'}
+  - @interviews.each do |interview|
+    %article{ :class => interview_class_helper(@interviews, interview) }
+      %h2= interview.name
+      %p= interview.title
+      %a{:href => interview.url}= interview.url
+    

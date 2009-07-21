@@ -1,0 +1,35 @@
+/* Makeshift CSS Reset */
+{
+	margin: 0;
+	padding: 0;
+}
+
+/* Tell the browser to render HTML 5 elements as block */
+header, footer, section {
+	display: block;
+}
+
+body {
+  margin: 0 auto;
+  padding: 0;
+	width: 74em;
+  font: 10pt/1.2em Verdana, Helvetica, Arial, sans-serif;
+	background: #000;
+	color: #fff;
+}
+
+h1 {
+	text-align: center;
+	font-size: 32pt;
+}
+
+a {
+	color: #fff;
+}
+
+footer p {
+	text-align: center;
+}
+
+@import 'MooFlow.css';
+@import 'MooFlowViewer.css';
