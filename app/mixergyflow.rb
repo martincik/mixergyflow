@@ -5,33 +5,24 @@ require 'sass'
 require 'dm-core'
 require 'dm-validations'
 require 'fileutils'
-
 require 'authorization'
+require 'interview'
 
 helpers do
   include Sinatra::Authorization
 end
 
+INTERVIEW_PICTURE_PATH = File.join(File.dirname(__FILE__), '..', 'public', 'interviews')
+
 def interview_class_helper(interviews, interview)
-  class_string = interviews.last == interview ? 'last' : ''
-  class_string = interviews.first == interview ? 'first' : ''
-  class_string
+  if interviews.last == interview
+    'last' 
+  else 
+    (interviews.first == interview ? 'first' : '')
+  end
 end
 
 DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/mixergyflow.db")
-
-class Interview
-  include DataMapper::Resource
-  property :id, Serial
-  property :name, String
-  property :title, String
-  property :url, Text
-  property :created_at, DateTime
-  
-  validates_present :name
-  validates_present :title
-  validates_present :url
-end
 
 get '/' do
   redirect '/admin'
@@ -51,16 +42,26 @@ post '/admin' do
   Interview.create( :name => params[:name], 
     :title => params[:title],
     :url => params[:url],
+    :picture_name => params[:data][:filename],
     :created_at => Time.now 
   )
   
-  FileUtils.mv(params[:data][:tempfile], File.join(File.dirname(__FILE__), '..', 'public', 'interviews'))
+  dest_file = File.join(INTERVIEW_PICTURE_PATH, params[:data][:filename])
+  File.open(dest_file,"wb+") do |f| 
+    f.write(params[:data][:tempfile].read) 
+  end
   
   redirect '/admin'
 end
 
 get '/admin/:id/delete' do
-  Interview.get( params[:id] ).destroy
+  interview = Interview.get( params[:id] )
+  
+  # Instead of calling dangerous 'rm' method it's safer to move files to "trash"
+  FileUtils.mv(File.join(INTERVIEW_PICTURE_PATH, interview.picture_name), 
+    File.join('/tmp', interview.picture_name))
+  
+  interview.destroy
   
   redirect '/admin'
 end

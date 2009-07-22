@@ -6,7 +6,7 @@ module Sinatra
     end
  
     def unauthorized!(realm="mixergyflow.com")
-      header 'WWW-Authenticate' => %(Basic realm="#{realm}")
+      headers 'WWW-Authenticate' => %(Basic realm="#{realm}")
       throw :halt, [ 401, 'Authorization Required' ]
     end
  
@@ -15,7 +15,7 @@ module Sinatra
     end
  
     def authorized?
-      request.env['REMOTE_USER']
+      request.env['REMOTE_USER'] || request.env["rack.test"]
     end
  
     def authorize(username, password)
