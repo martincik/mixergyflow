@@ -1,30 +1,39 @@
 %fieldset
-  %form{:method => "post", :enctype => "multipart/form-data"}
+  %form#interview_form{:method => "post", :enctype => "multipart/form-data" :name => 'interview_form'}
     %ul
       %li
         %label{:for => 'new-interview-name'}
-          Name
-        %input{:type => 'text', :name => 'name', :id => 'new-interview-name'}
+          Name &#x262F;
+        %input{:type => 'text', :name => 'name', :id => 'new-interview-name', :required => "true"}
+      %li
+        %label{:for => 'new-interview-name', :required => true}
+          Title &#x262F;
+        %input{:type =>'text', :name => 'title', :id => 'new-interview-title', :required => "true"}
       %li
         %label{:for => 'new-interview-name'}
-          Title
-        %input{:type =>'text', :name => 'title', :id => 'new-interview-title'}
-      %li
-        %label{:for => 'new-interview-name'}
-          URL
-        %input{:type => 'text', :name => 'url', :id => 'new-interview-url'}
+          URL &#x262F;
+        %input{:type => 'text', :name => 'url', :id => 'new-interview-url', :type => "url", :required => "true"}
       %li 
         %label{:for => 'new-interview-data'}
-          Interview picture
-        %input{:type => 'file', :name => 'data'} 
+          Interview picture &#x262F;
+        %input{:type => 'file', :name => 'data', :required => "true"} 
       %li
-        %button{:type=>'submit'}
-          Add Interview
+        %a{:class => 'large green awesome', :onclick=>"document.interview_form.submit();"}
+          Add Interview &#x21A9;
+        %em{:class => 'mandatory'} &#x262F; &ndash; Did you fill them all?
+
+%section#regenerate
+  %a{:class => 'large orange awesome', :href=>"/admin/regenerate"}
+    Regenerate Public Site &rarr;
 
 %section{:id => 'interviews'}
   - @interviews.each do |interview|
     %article{ :class => interview_class_helper(@interviews, interview) }
-      %h2= interview.name
-      %p= interview.title
-      %a{:href => interview.url}= interview.url
+      %p
+        %h2= interview.name
+        %span= interview.title
+        %br
+        %a{:href => interview.url}= interview.url
+      %p{:style=>'text-align: right;'}
+        %a{:href => "/admin/#{interview.id}/delete", :class => 'red awesome', :onclick => "javascript:return confirm('Interview &bdquo;#{interview.name}&rdquo; will be deleted forever! (no fancy undo) Still sure?')" } Delete &infin;
     

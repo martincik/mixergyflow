@@ -10,4 +10,7 @@ class Interview
   validates_present :name
   validates_present :title
   validates_present :url
+  validates_present :picture_name
 end
+
+DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/mixergyflow.db")

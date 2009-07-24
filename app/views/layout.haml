@@ -6,5 +6,11 @@
   %body
     %header
       %h1 Mixergy Flow - Admin
+    - if flash[:error]
+      %section{ :id => 'error' }
+        = flash[:error]
+    - if flash[:notice]
+      %section{ :id => 'notice' }
+        = flash[:notice]
     %section{ :id => 'content' }
       = yield
