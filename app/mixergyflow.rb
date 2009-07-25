@@ -4,6 +4,7 @@ require 'haml'
 require 'sass'
 require 'dm-core'
 require 'dm-validations'
+require 'nokogiri'
 require 'fileutils'
 require 'authorization'
 require 'interview'
@@ -29,7 +30,8 @@ before do
   @_flash, session[:_flash] = session[:_flash], nil if session[:_flash]
 end
 
-INTERVIEW_PICTURE_PATH = File.join(File.dirname(__FILE__), '..', 'public', 'interviews')
+INTERVIEW_OUTPUT_PATH = File.join(File.dirname(__FILE__), '..', 'public')
+INTERVIEW_PICTURE_PATH = File.join(INTERVIEW_OUTPUT_PATH, 'interviews')
 
 def interview_class_helper(interviews, interview)
   if interviews.last == interview
@@ -82,11 +84,11 @@ end
 get '/admin/:id/delete' do
   require_administrative_privileges
   
-  interview = Interview.get( params[:id] )
+  interview = Interview.get params[:id]
   
   # Instead of calling dangerous 'rm' method it's safer to move files to "trash"
   FileUtils.mv(File.join(INTERVIEW_PICTURE_PATH, interview.picture_name), 
-    File.join('/tmp', interview.picture_name))
+    File.join('/tmp', interview.picture_name), :force => true)
   
   if interview.destroy
     flash[:notice] = "Interview deleted successfully."
@@ -102,7 +104,21 @@ get '/admin/regenerate' do
   
   @interviews = Interview.all :order => [:created_at]
   
+  interview_haml_template = File.read(File.join(File.dirname(__FILE__), 'views', '_interviews.haml'))
+
+  dest_file = File.join(INTERVIEW_OUTPUT_PATH, 'index.html')
   
+  markup = Nokogiri::HTML.parse(File.read(dest_file))
+  markup.search("#MooFlow").each do |el|
+    engine = Haml::Engine.new(interview_haml_template, :attr_wrapper => '"')
+    el.inner_html = engine.render(Object.new, :interviews => @interviews)
+  end
+  
+  File.open(dest_file,"wb+") do |f| 
+    f.write(markup.to_html) 
+  end
+  
+  redirect '/admin'
 end
 
 # SASS stylesheet

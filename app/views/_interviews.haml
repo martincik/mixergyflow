@@ -1,0 +1,3 @@
+- interviews.each do |interview|
+  %a{:rel=>"link", :href=>interview.url}
+    %img{:title=>interview.title, :alt=>interview.name, :src=>"interviews/" + interview.picture_name}
