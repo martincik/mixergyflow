@@ -27,7 +27,7 @@ ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh", "id_rsa")]
 namespace :deploy do
   desc "Restarting mod_rails with restart.txt"
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "touch #{current_path}/tmp/restart.txt"
+    run "touch #{current_path}/app/tmp/restart.txt"
   end
 
   [:start, :stop].each do |t|
