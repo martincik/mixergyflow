@@ -6,5 +6,5 @@ set :views, File.join(File.dirname(__FILE__), 'app','views')
 set :run, false
 set :env, (ENV['RACK_ENV'] ? ENV['RACK_ENV'].to_sym : :development)
 
-require 'app/mixergyflow'  
+require 'app/mixergyflow'
 run Sinatra.application
