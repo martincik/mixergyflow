@@ -10,4 +10,4 @@ set :environment, (ENV['RACK_ENV'] ? ENV['RACK_ENV'].to_sym : :development)
 set :app_file, File.join(root_dir, 'mixergyflow.rb')
 
 require 'mixergyflow'
-run Sinatra.Application
+run Sinatra.application
